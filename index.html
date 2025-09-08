@@ -1,0 +1,128 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Simulador de Investimentos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://unpkg.com/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="container">
+    <h1>Simulador de Investimentos</h1>
+  </header>
+
+  <main class="container grid">
+    <section aria-labelledby="parametros-title" class="panel">
+      <h2 id="parametros-title">Parâmetros</h2>
+
+      <form id="form" novalidate>
+        <div class="field">
+          <label for="valorInicial">Valor inicial (R$)</label>
+          <div class="input-prefix">
+            <span class="prefix">R$</span>
+            <input id="valorInicial" type="text" inputmode="decimal" autocomplete="off"
+                   value="1.000,00" aria-describedby="erroValorInicial" />
+          </div>
+          <p id="erroValorInicial" class="error" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+          <label for="aporteMensal">Aporte mensal (R$)</label>
+          <div class="input-prefix">
+            <span class="prefix">R$</span>
+            <input id="aporteMensal" type="text" inputmode="decimal" autocomplete="off"
+                   value="500,00" aria-describedby="erroAporteMensal" />
+          </div>
+          <p id="erroAporteMensal" class="error" aria-live="polite"></p>
+        </div>
+
+        <fieldset class="field">
+          <legend id="taxaLegend">Taxa (% a.a.)</legend>
+          <div class="input-suffix">
+            <input id="taxa" type="text" inputmode="decimal" autocomplete="off"
+                   value="12,00" aria-describedby="erroTaxa" />
+            <span class="suffix">%</span>
+          </div>
+
+          <div class="toggle" role="radiogroup" aria-label="Base da taxa">
+            <input type="radio" id="aa" name="taxaBase" value="aa" checked />
+            <label for="aa">a.a.</label>
+            <input type="radio" id="am" name="taxaBase" value="am" />
+            <label for="am">a.m.</label>
+          </div>
+          <p id="erroTaxa" class="error" aria-live="polite"></p>
+        </fieldset>
+
+        <div class="field group">
+          <div>
+            <label for="prazoAnos">Prazo (anos)</label>
+            <input id="prazoAnos" type="number" min="0" step="1" value="5" aria-describedby="erroPrazo" />
+          </div>
+          <div>
+            <label for="prazoMeses">Prazo (meses)</label>
+            <input id="prazoMeses" type="number" min="0" step="1" value="0" aria-describedby="erroPrazo" />
+          </div>
+        </div>
+        <p id="erroPrazo" class="error" aria-live="polite"></p>
+
+        <div class="field">
+          <label for="recorrencia">Recorrência dos aportes</label>
+          <select id="recorrencia" disabled>
+            <option value="mensal" selected>Mensal</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button id="calcular" type="button">Calcular</button>
+          <button id="zerar" type="button" class="ghost">Zerar</button>
+        </div>
+      </form>
+    </section>
+
+    <section aria-labelledby="resultados-title" class="panel">
+      <h2 id="resultados-title">Resultados</h2>
+
+      <div class="cards">
+        <div class="card">
+          <p class="card-title">Valor Futuro</p>
+          <p id="valorFuturo" class="card-value">R$ 0,00</p>
+        </div>
+        <div class="card">
+          <p class="card-title">Total Investido</p>
+          <p id="totalInvestido" class="card-value">R$ 0,00</p>
+        </div>
+        <div class="card">
+          <p class="card-title">Juros Acumulados</p>
+          <p id="jurosAcumulados" class="card-value">R$ 0,00</p>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="grafico" aria-label="Evolução do investimento" role="img"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <section aria-labelledby="evolucao-title" class="container panel table-panel">
+    <h2 id="evolucao-title">Evolução Mensal</h2>
+    <div class="table-wrap" role="region" aria-label="Tabela de evolução mensal">
+      <table>
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th class="num">Aporte (R$)</th>
+            <th class="num">Total Investido (R$)</th>
+            <th class="num">Juros (R$)</th>
+            <th class="num">Saldo (R$)</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
