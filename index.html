@@ -1,128 +1,150 @@
-<!-- index.html -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <title>Simulador de Investimentos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="./styles.css" />
-  <script src="https://unpkg.com/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <title>Simulador de Investimentos</title>
+  <!-- Favicon básico -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://camarinvestimentos.github.io/simulator/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://camarinvestimentos.github.io/simulator/favicon-16x16.png">
+<link rel="shortcut icon" href="https://camarinvestimentos.github.io/simulator/favicon.ico">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://camarinvestimentos.github.io/simulator/apple-touch-icon.png">
+
+<!-- Cor da barra de navegação no mobile -->
+<meta name="theme-color" content="#FF7A00">
+
+  <!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simulador de Investimentos — Camar">
+<meta property="og:description" content="Projete aportes, juros compostos e veja o valor final com um gráfico interativo.">
+<meta property="og:url" content="https://camarinvestimentos.github.io/simulator/">
+<meta property="og:image" content="https://camarinvestimentos.github.io/simulator/Logo.png">
+<meta property="og:locale" content="pt_BR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Simulador de Investimentos — Camar">
+<meta name="twitter:description" content="Projete aportes, juros compostos e visualize o valor final.">
+<meta name="twitter:image" content="https://camarinvestimentos.github.io/simulator/Logo.png">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="container">
-    <h1>Simulador de Investimentos</h1>
-  </header>
+  <div class="wrap">
+    <header>
+      <h1>Simulador de Investimentos</h1>
+      <small>Camar Investimentos</small>
+    </header>
 
-  <main class="container grid">
-    <section aria-labelledby="parametros-title" class="panel">
-      <h2 id="parametros-title">Parâmetros</h2>
-
-      <form id="form" novalidate>
-        <div class="field">
-          <label for="valorInicial">Valor inicial (R$)</label>
-          <div class="input-prefix">
-            <span class="prefix">R$</span>
-            <input id="valorInicial" type="text" inputmode="decimal" autocomplete="off"
-                   value="1.000,00" aria-describedby="erroValorInicial" />
-          </div>
-          <p id="erroValorInicial" class="error" aria-live="polite"></p>
-        </div>
-
-        <div class="field">
-          <label for="aporteMensal">Aporte mensal (R$)</label>
-          <div class="input-prefix">
-            <span class="prefix">R$</span>
-            <input id="aporteMensal" type="text" inputmode="decimal" autocomplete="off"
-                   value="500,00" aria-describedby="erroAporteMensal" />
-          </div>
-          <p id="erroAporteMensal" class="error" aria-live="polite"></p>
-        </div>
-
-        <fieldset class="field">
-          <legend id="taxaLegend">Taxa (% a.a.)</legend>
-          <div class="input-suffix">
-            <input id="taxa" type="text" inputmode="decimal" autocomplete="off"
-                   value="12,00" aria-describedby="erroTaxa" />
-            <span class="suffix">%</span>
-          </div>
-
-          <div class="toggle" role="radiogroup" aria-label="Base da taxa">
-            <input type="radio" id="aa" name="taxaBase" value="aa" checked />
-            <label for="aa">a.a.</label>
-            <input type="radio" id="am" name="taxaBase" value="am" />
-            <label for="am">a.m.</label>
-          </div>
-          <p id="erroTaxa" class="error" aria-live="polite"></p>
-        </fieldset>
-
-        <div class="field group">
+    <div class="grid">
+      <!-- Painel de parâmetros -->
+      <section class="card">
+        <h2>Parâmetros</h2>
+        <div class="row">
           <div>
-            <label for="prazoAnos">Prazo (anos)</label>
-            <input id="prazoAnos" type="number" min="0" step="1" value="5" aria-describedby="erroPrazo" />
+            <label for="valorInicial">Valor inicial (R$)</label>
+            <input id="valorInicial" type="text" inputmode="decimal" placeholder="Ex.: 10.000,00" />
           </div>
           <div>
-            <label for="prazoMeses">Prazo (meses)</label>
-            <input id="prazoMeses" type="number" min="0" step="1" value="0" aria-describedby="erroPrazo" />
+            <label for="prazo">Prazo (anos)</label>
+            <input id="prazo" type="number" step="0.5" placeholder="Ex.: 5" />
           </div>
         </div>
-        <p id="erroPrazo" class="error" aria-live="polite"></p>
 
-        <div class="field">
-          <label for="recorrencia">Recorrência dos aportes</label>
-          <select id="recorrencia" disabled>
-            <option value="mensal" selected>Mensal</option>
-          </select>
+        <div class="row">
+          <div>
+            <label for="rendimento">Rendimento (% a.a.)</label>
+            <input id="rendimento" type="number" step="0.01" placeholder="Ex.: 12" />
+          </div>
+          <div>
+            <label for="aporte">Aportes (R$)</label>
+            <input id="aporte" type="text" inputmode="decimal" placeholder="Ex.: 500,00" />
+          </div>
         </div>
 
-        <div class="actions">
-          <button id="calcular" type="button">Calcular</button>
-          <button id="zerar" type="button" class="ghost">Zerar</button>
+        <div class="row">
+          <div>
+            <label for="recorrencia">Recorrência dos aportes</label>
+            <select id="recorrencia">
+              <option value="1">Mensal</option>
+              <option value="3">Trimestral</option>
+              <option value="6">Semestral</option>
+              <option value="12">Anual</option>
+            </select>
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <div class="actions">
+              <button class="btn" id="simular">Simular</button>
+              <button class="btn secondary" id="exemplo">Exemplo</button>
+            </div>
+          </div>
         </div>
-      </form>
-    </section>
 
-    <section aria-labelledby="resultados-title" class="panel">
-      <h2 id="resultados-title">Resultados</h2>
+        <div id="erro" class="err">Preencha valores válidos.</div>
 
-      <div class="cards">
+        <!-- KPIs -->
+        <div class="kpis">
+          <div class="kpi accent">
+            <div class="label">Valor Final</div>
+            <div class="value" id="kpiFinal">—</div>
+          </div>
+          <div class="kpi neutral">
+            <div class="label">Total Investido</div>
+            <div class="value" id="kpiInvestido">—</div>
+          </div>
+          <div class="kpi dark">
+            <div class="label">Juros Acumulados</div>
+            <div class="value" id="kpiJuros">—</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Resultados -->
+      <section class="results">
+        <div class="card chartbox">
+          <h2>Evolução do Saldo</h2>
+
+          <!-- Legenda -->
+          <div class="legend">
+            <span class="dot" style="--c: var(--accent)"></span> Saldo
+            <span class="spacer"></span>
+            <span class="dot" style="--c: var(--mutedLine)"></span> Investido
+          </div>
+
+          <!-- Tooltip -->
+          <div id="tooltip" class="tooltip" hidden></div>
+
+          <svg id="chart" viewBox="0 0 1000 280" preserveAspectRatio="none" aria-label="Gráfico de evolução"></svg>
+        </div>
+
         <div class="card">
-          <p class="card-title">Valor Futuro</p>
-          <p id="valorFuturo" class="card-value">R$ 0,00</p>
+          <h2>Resumo Mensal</h2>
+          <div class="scroll">
+            <table id="tabela">
+              <thead>
+                <tr>
+                  <th>Mês</th>
+                  <th>Saldo (R$)</th>
+                  <th>Investido (R$)</th>
+                  <th>Juros (R$)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
-        <div class="card">
-          <p class="card-title">Total Investido</p>
-          <p id="totalInvestido" class="card-value">R$ 0,00</p>
-        </div>
-        <div class="card">
-          <p class="card-title">Juros Acumulados</p>
-          <p id="jurosAcumulados" class="card-value">R$ 0,00</p>
-        </div>
-      </div>
 
-      <div class="chart-wrap">
-        <canvas id="grafico" aria-label="Evolução do investimento" role="img"></canvas>
-      </div>
-    </section>
-  </main>
-
-  <section aria-labelledby="evolucao-title" class="container panel table-panel">
-    <h2 id="evolucao-title">Evolução Mensal</h2>
-    <div class="table-wrap" role="region" aria-label="Tabela de evolução mensal">
-      <table>
-        <thead>
-          <tr>
-            <th>Mês</th>
-            <th class="num">Aporte (R$)</th>
-            <th class="num">Total Investido (R$)</th>
-            <th class="num">Juros (R$)</th>
-            <th class="num">Saldo (R$)</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
+        <!-- Seção Exportar removida -->
+      </section>
     </div>
-  </section>
+  </div>
 
-  <script src="./app.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
+
+
+
