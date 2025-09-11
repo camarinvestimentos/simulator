@@ -212,3 +212,25 @@ els.exemplo.addEventListener('click', ()=>{
 
 // Primeiro render (opcional)
 // simular();
+/* ---- Objetivo Financeiro ---- */
+.goal-panel{ margin-top:16px }
+.goal-grid{
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  gap:16px;
+}
+@media (max-width:800px){
+  .goal-grid{ grid-template-columns: 1fr }
+}
+.goal-results{
+  border:1px solid var(--w30);
+  border-radius:10px;
+  padding:12px;
+  background:#0f0f0f;
+}
+.goal-strong{ font-size:1.2rem; margin:.25rem 0 0; }
+.muted{ color:var(--w60) }
+.small{ font-size:.9rem }
+.spacer{ height:8px }
+
+
