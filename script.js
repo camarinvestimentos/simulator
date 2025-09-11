@@ -38,10 +38,6 @@
     totalInvestido: $('totalInvestido'),
     jurosAcumulados: $('jurosAcumulados'),
     tbody: $('tbody'),
-    objetivoValor: $('objetivoValor'),
-    objetivoTempo: $('objetivoTempo'),
-    objetivoAporte: $('objetivoAporte'),
-    objetivoObs: $('objetivoObs'),
     erros: {
       valorInicial: $('erroValorInicial'),
       aporteMensal: $('erroAporteMensal'),
@@ -54,7 +50,6 @@
   el.valorInicial.addEventListener('blur', () => formatMoneyInput(el.valorInicial));
   el.aporteMensal.addEventListener('blur', () => formatMoneyInput(el.aporteMensal));
   el.taxa.addEventListener('blur', () => formatPctInput(el.taxa));
-  if (el.objetivoValor) el.objetivoValor.addEventListener('blur', () => formatMoneyInput(el.objetivoValor));
 
   // Alternância a.a./a.m.
   const updateLegend = () => {
@@ -68,7 +63,7 @@
   // Erros
   const setError = (key, msg='') => { el.erros[key].textContent = msg; };
 
-  // Gráfico
+  // Gráfico (Chart.js)
   const ctx = document.getElementById('grafico').getContext('2d');
   const chart = new Chart(ctx, {
     type: 'line',
@@ -134,7 +129,7 @@
     }
   });
 
-  // Cálculo principal
+  // Cálculo
   const validate = ({P0, PMT, taxaPct, n}) => {
     let ok = true;
     if (P0 < 0) { setError('valorInicial','Informe um valor maior ou igual a R$ 0,00'); ok = false; } else setError('valorInicial','');
@@ -158,9 +153,9 @@
 
     let i;
     if (baseAA) {
-      i = Math.pow(1 + taxaPct/100, 1/12) - 1; // taxa mensal equivalente
+      i = Math.pow(1 + taxaPct/100, 1/12) - 1;
     } else {
-      i = taxaPct/100; // taxa mensal direta
+      i = taxaPct/100;
     }
 
     const labels = [];
@@ -184,41 +179,8 @@
     const totalInv = P0 + PMT * n;
     const jurosAcum = valorFuturo - totalInv;
 
-    return { labels, saldoSerie, investidoSerie, rows, valorFuturo, totalInv, jurosAcum, P0, PMT, i, n };
+    return { labels, saldoSerie, investidoSerie, rows, valorFuturo, totalInv, jurosAcum };
   };
-
-  // --- Objetivo: tempo para alcançar (com parâmetros atuais)
-  function tempoParaObjetivo({ P0, PMT, i, objetivo }, maxMeses = 1200){
-    if (!objetivo || objetivo <= 0) return null;
-    if (P0 >= objetivo) return 0;
-
-    if (i === 0){
-      const falta = objetivo - P0;
-      if (PMT <= 0) return Infinity;
-      return Math.ceil(falta / PMT);
-    }
-
-    let saldo = P0;
-    for (let m = 1; m <= maxMeses; m++){
-      saldo = saldo * (1 + i) + PMT;
-      if (saldo >= objetivo) return m;
-    }
-    return Infinity;
-  }
-
-  // --- Objetivo: aporte necessário para atingir no prazo atual
-  function aporteNecessario({ FV, P0, i, n }){
-    if (!n || n <= 0) return 0;
-    if (i === 0){
-      const p = (FV - P0)/n;
-      return p < 0 ? 0 : p;
-    }
-    const fator = Math.pow(1+i, n);
-    const num = (FV - P0 * fator) * i;
-    const den = (fator - 1);
-    const PMT = num / den;
-    return PMT < 0 ? 0 : PMT;
-  }
 
   const render = (data) => {
     if (!data) return;
@@ -245,32 +207,6 @@
       frag.appendChild(tr);
     });
     el.tbody.replaceChildren(frag);
-
-    // ---- Objetivo Financeiro ----
-    const objetivo = el.objetivoValor ? parseBR(el.objetivoValor.value) : 0;
-    if (el.objetivoValor && objetivo > 0){
-      const meses = tempoParaObjetivo({ P0: data.P0, PMT: data.PMT, i: data.i, objetivo });
-      if (meses === Infinity){
-        el.objetivoTempo.textContent = 'Não alcança em 100 anos com os parâmetros atuais';
-      } else if (meses === 0){
-        el.objetivoTempo.textContent = 'Já atingido';
-      } else {
-        const anos = Math.floor(meses / 12);
-        const rest = meses % 12;
-        el.objetivoTempo.textContent =
-          anos > 0 ? `${anos} ano(s) e ${rest} mês(es)` : `${meses} mês(es)`;
-      }
-
-      const pNec = aporteNecessario({ FV: objetivo, P0: data.P0, i: data.i, n: data.n });
-      el.objetivoAporte.textContent = fmtBRL.format(round2(pNec));
-      el.objetivoObs.textContent = pNec === 0
-        ? 'Com o capital presente e prazo, o objetivo já é atendido.'
-        : '';
-    } else if (el.objetivoTempo && el.objetivoAporte){
-      el.objetivoTempo.textContent = '—';
-      el.objetivoAporte.textContent = '—';
-      el.objetivoObs.textContent = '';
-    }
   };
 
   const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
@@ -288,7 +224,6 @@
     el.taxa.addEventListener(e, trigger);
     el.prazoAnos.addEventListener(e, trigger);
     el.prazoMeses.addEventListener(e, trigger);
-    if (el.objetivoValor) el.objetivoValor.addEventListener(e, trigger);
   });
   $('calcular').addEventListener('click', () => render(compute()));
   $('zerar').addEventListener('click', () => {
@@ -297,7 +232,6 @@
     el.taxa.value = '12,00';
     el.aa.checked = true; el.am.checked = false; updateLegend();
     el.prazoAnos.value = 5; el.prazoMeses.value = 0;
-    if (el.objetivoValor) el.objetivoValor.value = '100.000,00';
     setError('valorInicial',''); setError('aporteMensal',''); setError('taxa',''); setError('prazo','');
     render(compute());
   });
