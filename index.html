@@ -5,8 +5,6 @@
   <meta charset="utf-8" />
   <title>Simulador de Investimentos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css" />
   <script src="https://unpkg.com/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 </head>
@@ -107,33 +105,6 @@
     </section>
   </main>
 
-  <!-- NOVA SEÇÃO: Objetivo Financeiro -->
-  <section aria-labelledby="objetivo-title" class="container panel goal-panel">
-    <h2 id="objetivo-title">Objetivo Financeiro</h2>
-    <div class="goal-grid">
-      <div class="field">
-        <label for="objetivoValor">Objetivo (R$)</label>
-        <div class="input-prefix">
-          <span class="prefix">R$</span>
-          <input id="objetivoValor" type="text" inputmode="decimal" autocomplete="off"
-                 value="100.000,00" />
-        </div>
-      </div>
-
-      <div class="goal-results">
-        <p class="muted">Tempo estimado para alcançar com os parâmetros atuais:</p>
-        <p id="objetivoTempo" class="goal-strong">—</p>
-
-        <div class="spacer"></div>
-
-        <p class="muted">Aporte mensal necessário para atingir <strong>no prazo atual</strong>:</p>
-        <p id="objetivoAporte" class="goal-strong">—</p>
-
-        <p id="objetivoObs" class="muted small"></p>
-      </div>
-    </div>
-  </section>
-
   <section aria-labelledby="evolucao-title" class="container panel table-panel">
     <h2 id="evolucao-title">Evolução Mensal</h2>
     <div class="table-wrap" role="region" aria-label="Tabela de evolução mensal">
@@ -155,4 +126,3 @@
   <script src="./app.js" defer></script>
 </body>
 </html>
-
