@@ -79,7 +79,7 @@
           label: 'Valor total',
           data: [],
           borderColor: '#ff7a00',
-          backgroundColor: 'rgba(255,122,0,0.15)',
+          backgroundColor: 'rgba(255,122,0,0.16)',
           borderWidth: 3,
           tension: 0.2,
           pointRadius: 0,
@@ -88,7 +88,7 @@
         {
           label: 'Total investido',
           data: [],
-          borderColor: '#ffffff',
+          borderColor: 'rgba(255,255,255,.85)',
           borderDash: [6,6],
           borderWidth: 2,
           tension: 0.2,
@@ -102,8 +102,19 @@
       maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { position: 'top', labels: { color: '#fff' } },
+        legend: {
+          position: 'top',
+          labels: { color: '#ffffff', usePointStyle: true, boxWidth: 8, boxHeight: 8 }
+        },
         tooltip: {
+          backgroundColor: 'rgba(14,14,18,.96)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
+          borderColor: 'rgba(255,255,255,.15)',
+          borderWidth: 1,
+          padding: 10,
+          displayColors: false,
+          cornerRadius: 8,
           callbacks: {
             title: (items) => `Mês ${items[0].label}`,
             label: (ctx) => `${ctx.dataset.label}: ${fmtBRL.format(ctx.parsed.y)}`
@@ -111,10 +122,13 @@
         }
       },
       scales: {
-        x: { ticks: { color: 'var(--tick)' }, grid: { color: 'var(--grid)' } },
+        x: {
+          ticks: { color: 'var(--tick)' },
+          grid: { color: 'var(--grid)', drawOnChartArea: true, drawTicks: false }
+        },
         y: {
           ticks: { color: 'var(--tick)', callback: v => fmtBRL.format(v) },
-          grid: { color: 'var(--grid)' }
+          grid: { color: 'var(--grid)', drawTicks: false }
         }
       }
     }
@@ -178,27 +192,24 @@
     if (!objetivo || objetivo <= 0) return null;
     if (P0 >= objetivo) return 0;
 
-    // Caso i=0 (sem juros): só acumula aportes
     if (i === 0){
       const falta = objetivo - P0;
       if (PMT <= 0) return Infinity;
       return Math.ceil(falta / PMT);
     }
 
-    // Iteração mensal (estável e fácil de entender)
     let saldo = P0;
     for (let m = 1; m <= maxMeses; m++){
       saldo = saldo * (1 + i) + PMT;
       if (saldo >= objetivo) return m;
     }
-    return Infinity; // não alcança dentro do limite
+    return Infinity;
   }
 
   // --- Objetivo: aporte necessário para atingir no prazo atual
   function aporteNecessario({ FV, P0, i, n }){
     if (!n || n <= 0) return 0;
     if (i === 0){
-      // Sem juros: PMT = (FV - P0)/n
       const p = (FV - P0)/n;
       return p < 0 ? 0 : p;
     }
@@ -238,7 +249,6 @@
     // ---- Objetivo Financeiro ----
     const objetivo = el.objetivoValor ? parseBR(el.objetivoValor.value) : 0;
     if (el.objetivoValor && objetivo > 0){
-      // Tempo para alcançar com parâmetros atuais
       const meses = tempoParaObjetivo({ P0: data.P0, PMT: data.PMT, i: data.i, objetivo });
       if (meses === Infinity){
         el.objetivoTempo.textContent = 'Não alcança em 100 anos com os parâmetros atuais';
@@ -251,7 +261,6 @@
           anos > 0 ? `${anos} ano(s) e ${rest} mês(es)` : `${meses} mês(es)`;
       }
 
-      // Aporte necessário para atingir no prazo atual (n meses)
       const pNec = aporteNecessario({ FV: objetivo, P0: data.P0, i: data.i, n: data.n });
       el.objetivoAporte.textContent = fmtBRL.format(round2(pNec));
       el.objetivoObs.textContent = pNec === 0
