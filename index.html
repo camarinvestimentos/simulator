@@ -4,30 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Simulador de Investimentos</title>
-  <!-- Favicon básico -->
-<link rel="icon" type="image/png" sizes="32x32" href="https://camarinvestimentos.github.io/simulator/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://camarinvestimentos.github.io/simulator/favicon-16x16.png">
-<link rel="shortcut icon" href="https://camarinvestimentos.github.io/simulator/favicon.ico">
 
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="https://camarinvestimentos.github.io/simulator/apple-touch-icon.png">
+  <!-- Favicons e Metas (mantidos) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://camarinvestimentos.github.io/simulator/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://camarinvestimentos.github.io/simulator/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://camarinvestimentos.github.io/simulator/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://camarinvestimentos.github.io/simulator/apple-touch-icon.png">
+  <meta name="theme-color" content="#FF7A00">
 
-<!-- Cor da barra de navegação no mobile -->
-<meta name="theme-color" content="#FF7A00">
-
-  <!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Simulador de Investimentos — Camar">
-<meta property="og:description" content="Projete aportes, juros compostos e veja o valor final com um gráfico interativo.">
-<meta property="og:url" content="https://camarinvestimentos.github.io/simulator/">
-<meta property="og:image" content="https://camarinvestimentos.github.io/simulator/Logo.png">
-<meta property="og:locale" content="pt_BR">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Simulador de Investimentos — Camar">
-<meta name="twitter:description" content="Projete aportes, juros compostos e visualize o valor final.">
-<meta name="twitter:image" content="https://camarinvestimentos.github.io/simulator/Logo.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Simulador de Investimentos — Camar">
+  <meta property="og:description" content="Projete aportes, juros compostos e veja o valor final com um gráfico interativo.">
+  <meta property="og:url" content="https://camarinvestimentos.github.io/simulator/">
+  <meta property="og:image" content="https://camarinvestimentos.github.io/simulator/Logo.png">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Simulador de Investimentos — Camar">
+  <meta name="twitter:description" content="Projete aportes, juros compostos e visualize o valor final.">
+  <meta name="twitter:image" content="https://camarinvestimentos.github.io/simulator/Logo.png">
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -35,13 +29,14 @@
   <div class="wrap">
     <header>
       <h1>Simulador de Investimentos</h1>
-      <small>Camar Investimentos</small>
+      <small>João Camargo</small>
     </header>
 
     <div class="grid">
       <!-- Painel de parâmetros -->
       <section class="card">
         <h2>Parâmetros</h2>
+
         <div class="row">
           <div>
             <label for="valorInicial">Valor inicial (R$)</label>
@@ -83,6 +78,27 @@
           </div>
         </div>
 
+        <!-- NOVOS CAMPOS -->
+        <div class="row">
+          <div>
+            <label for="taxaInflacao">Inflação (% a.a.)</label>
+            <input id="taxaInflacao" type="number" step="0.01" placeholder="Ex.: 3" />
+          </div>
+          <div>
+            <label for="taxaPassiva">Taxa para renda passiva (% a.m.)</label>
+            <input id="taxaPassiva" type="number" step="0.01" placeholder="Ex.: 1" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="objetivo">Objetivo financeiro (R$)</label>
+            <input id="objetivo" type="text" inputmode="decimal" placeholder="Ex.: 500.000,00" />
+          </div>
+          <div>
+            <!-- Espaço vazio para manter o layout -->
+          </div>
+        </div>
+
         <div id="erro" class="err">Preencha valores válidos.</div>
 
         <!-- KPIs -->
@@ -99,6 +115,30 @@
             <div class="label">Juros Acumulados</div>
             <div class="value" id="kpiJuros">—</div>
           </div>
+
+          <!-- NOVOS CARDS -->
+          <div class="kpi info">
+            <div class="label">Renda Passiva</div>
+            <div class="value" id="kpiPassivaMensal">—</div>
+            <div class="sub" id="kpiPassivaAnual">—</div>
+          </div>
+          <div class="kpi info">
+            <div class="label">Aporte p/ Objetivo</div>
+            <div class="value" id="kpiAporteNec">—</div>
+            <div class="sub" id="kpiObjetivoMsg">—</div>
+          </div>
+          <div class="kpi accent">
+            <div class="label">Valor Final Real</div>
+            <div class="value" id="kpiFinalReal">—</div>
+          </div>
+          <div class="kpi neutral">
+            <div class="label">Total Investido Real</div>
+            <div class="value" id="kpiInvestidoReal">—</div>
+          </div>
+          <div class="kpi dark">
+            <div class="label">Juros Acumulados Reais</div>
+            <div class="value" id="kpiJurosReal">—</div>
+          </div>
         </div>
       </section>
 
@@ -107,16 +147,13 @@
         <div class="card chartbox">
           <h2>Evolução do Saldo</h2>
 
-          <!-- Legenda -->
           <div class="legend">
             <span class="dot" style="--c: var(--accent)"></span> Saldo
             <span class="spacer"></span>
             <span class="dot" style="--c: var(--mutedLine)"></span> Investido
           </div>
 
-          <!-- Tooltip -->
           <div id="tooltip" class="tooltip" hidden></div>
-
           <svg id="chart" viewBox="0 0 1000 280" preserveAspectRatio="none" aria-label="Gráfico de evolução"></svg>
         </div>
 
@@ -128,16 +165,17 @@
                 <tr>
                   <th>Mês</th>
                   <th>Saldo (R$)</th>
+                  <th>Saldo Real (R$)</th>
                   <th>Investido (R$)</th>
+                  <th>Investido Real (R$)</th>
                   <th>Juros (R$)</th>
+                  <th>Juros Real (R$)</th>
                 </tr>
               </thead>
               <tbody></tbody>
             </table>
           </div>
         </div>
-
-        <!-- Seção Exportar removida -->
       </section>
     </div>
   </div>
@@ -145,6 +183,4 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
 
