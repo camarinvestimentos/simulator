@@ -33,6 +33,9 @@ const els = {
   kpiObjetivoMsg: document.querySelector('#kpiObjetivoMsg'),
 
   tabelaBody: document.querySelector('#tabela tbody'),
+  tableHead: document.querySelector('#tableHead'),
+  toggleNominal: document.querySelector('#toggleNominal'),
+  toggleReal: document.querySelector('#toggleReal'),
   chart: document.querySelector('#chart'),
   tooltip: document.querySelector('#tooltip'),
 };
@@ -135,14 +138,54 @@ function simular() {
   }
 
   // Tabela
-  els.tabelaBody.innerHTML = pontos.map(p=>`
-    <tr>
-      <td>${p.m}</td>
-      <td>${fmtBRL(p.saldo)} (${fmtBRL(p.saldoReal)} real)</td>
-      <td>${fmtBRL(p.investido)} (${fmtBRL(p.investidoReal)} real)</td>
-      <td>${fmtBRL(p.juros)} (${fmtBRL(p.jurosReal)} real)</td>
-    </tr>
-  `).join("");
+  let currentPontos = pontos;
+  let isNominalView = true;
+
+  function renderTable(data, isNominal) {
+    els.tabelaBody.innerHTML = data.map(p=>`
+      <tr>
+        <td>${p.m}</td>
+        <td>${fmtBRL(isNominal ? p.saldo : p.saldoReal)}</td>
+        <td>${fmtBRL(isNominal ? p.investido : p.investidoReal)}</td>
+        <td>${fmtBRL(isNominal ? p.juros : p.jurosReal)}</td>
+      </tr>
+    `).join("");
+
+    els.tableHead.innerHTML = `
+      <th>Mês</th>
+      <th>Saldo (R$)</th>
+      <th>Investido (R$)</th>
+      <th>Juros (R$)</th>
+    `;
+    if (!isNominal) {
+      els.tableHead.innerHTML = `
+        <th>Mês</th>
+        <th>Saldo Real (R$)</th>
+        <th>Investido Real (R$)</th>
+        <th>Juros Real (R$)</th>
+      `;
+    }
+  }
+
+  renderTable(currentPontos, isNominalView);
+
+  els.toggleNominal.onclick = () => {
+    isNominalView = true;
+    renderTable(currentPontos, isNominalView);
+    els.toggleNominal.classList.add('active');
+    els.toggleNominal.classList.remove('secondary');
+    els.toggleReal.classList.remove('active');
+    els.toggleReal.classList.add('secondary');
+  };
+
+  els.toggleReal.onclick = () => {
+    isNominalView = false;
+    renderTable(currentPontos, isNominalView);
+    els.toggleReal.classList.add('active');
+    els.toggleReal.classList.remove('secondary');
+    els.toggleNominal.classList.remove('active');
+    els.toggleNominal.classList.add('secondary');
+  };
 
   // Gráfico
   desenharGrafico(pontos);
@@ -300,4 +343,9 @@ els.objetivo?.addEventListener('blur', ()=>{
   const n = parseBRL(els.objetivo.value);
   els.objetivo.value = n ? n.toLocaleString('pt-BR') + ',00' : '';
 });
+
+
+
+// Inicializa a tabela e os botões ao carregar a página
+els.toggleNominal.click();
 
