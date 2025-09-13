@@ -6,9 +6,9 @@
   --text: #f5f6f7;
   --muted: #9aa0a6;
 
-  --accent: #ff7a00;   /* laranja principal */
+  --accent: #ff7a00;
   --accent-soft: #ffb066;
-  --mutedLine: #6b7280; /* cinza para série "Investido" */
+  --mutedLine: #6b7280;
   --danger: #ff6b6b;
 
   --grid: rgba(255,255,255,0.06);
@@ -80,9 +80,12 @@ input:focus, select:focus { border-color: var(--accent) }
 .kpi { padding:12px; border:1px solid var(--border); border-radius:10px; background:#0e0e12 }
 .kpi .label { color: var(--muted); font-size:12px }
 .kpi .value { font-size:18px; font-weight: bold }
+.kpi .sub   { font-size:12px; color:var(--muted); margin-top:4px }
 .kpi.accent { background: linear-gradient(180deg, rgba(255,122,0,.18), rgba(255,122,0,.06)) }
 .kpi.neutral { background: linear-gradient(180deg, rgba(107,114,128,.18), rgba(107,114,128,.06)) }
 .kpi.dark { background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.06)) }
+/* novo estilo info para os cards adicionados */
+.kpi.info { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)) }
 
 .err { color: var(--danger); display:none; margin-top:8px }
 .scroll { max-height: 260px; overflow:auto; border:1px solid var(--border); border-radius:10px }
@@ -124,3 +127,4 @@ thead th { position: sticky; top: 0; background: #111114; z-index: 1; text-align
 .marker { fill: var(--accent); stroke: #000; stroke-width: 0.5 }
 .marker-invest { fill: var(--mutedLine); stroke: #000; stroke-width: 0.5 }
 .cursor-line { stroke: rgba(255,255,255,.35); stroke-dasharray: 4 4 }
+
