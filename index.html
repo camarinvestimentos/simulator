@@ -37,107 +37,119 @@
       <section class="card">
         <h2>Parâmetros</h2>
 
-        <div class="row">
-          <div>
-            <label for="valorInicial">Valor inicial (R$)</label>
-            <input id="valorInicial" type="text" inputmode="decimal" placeholder="Ex.: 10.000,00" />
+        <div class="input-group">
+          <h3>Dados do Investimento</h3>
+          <div class="row">
+            <div>
+              <label for="valorInicial">Valor inicial (R$)</label>
+              <input id="valorInicial" type="text" inputmode="decimal" placeholder="Ex.: 10.000,00" />
+            </div>
+            <div>
+              <label for="prazo">Prazo (anos)</label>
+              <input id="prazo" type="number" step="0.5" placeholder="Ex.: 5" />
+            </div>
           </div>
-          <div>
-            <label for="prazo">Prazo (anos)</label>
-            <input id="prazo" type="number" step="0.5" placeholder="Ex.: 5" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label for="rendimento">Rendimento (% a.a.)</label>
-            <input id="rendimento" type="number" step="0.01" placeholder="Ex.: 12" />
-          </div>
-          <div>
-            <label for="aporte">Aportes (R$)</label>
-            <input id="aporte" type="text" inputmode="decimal" placeholder="Ex.: 500,00" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label for="recorrencia">Recorrência dos aportes</label>
-            <select id="recorrencia">
-              <option value="1">Mensal</option>
-              <option value="3">Trimestral</option>
-              <option value="6">Semestral</option>
-              <option value="12">Anual</option>
-            </select>
-          </div>
-          <div>
-            <label>&nbsp;</label>
-            <div class="actions">
-              <button class="btn" id="simular">Simular</button>
-              <button class="btn secondary" id="exemplo">Exemplo</button>
+          <div class="row">
+            <div>
+              <label for="rendimento">Rendimento (% a.a.)</label>
+              <input id="rendimento" type="number" step="0.01" placeholder="Ex.: 12" />
+            </div>
+            <div>
+              <label for="taxaInflacao">Inflação (% a.a.)</label>
+              <input id="taxaInflacao" type="number" step="0.01" placeholder="Ex.: 3" />
             </div>
           </div>
         </div>
 
-        <!-- NOVOS CAMPOS -->
-        <div class="row">
-          <div>
-            <label for="taxaInflacao">Inflação (% a.a.)</label>
-            <input id="taxaInflacao" type="number" step="0.01" placeholder="Ex.: 3" />
-          </div>
-          <div>
-            <label for="taxaPassiva">Taxa para renda passiva (% a.m.)</label>
-            <input id="taxaPassiva" type="number" step="0.01" placeholder="Ex.: 1" />
+        <div class="input-group">
+          <h3>Aportes Adicionais</h3>
+          <div class="row">
+            <div>
+              <label for="aporte">Aportes (R$)</label>
+              <input id="aporte" type="text" inputmode="decimal" placeholder="Ex.: 500,00" />
+            </div>
+            <div>
+              <label for="recorrencia">Recorrência dos aportes</label>
+              <select id="recorrencia">
+                <option value="1">Mensal</option>
+                <option value="3">Trimestral</option>
+                <option value="6">Semestral</option>
+                <option value="12">Anual</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div>
-            <label for="objetivo">Objetivo financeiro (R$)</label>
-            <input id="objetivo" type="text" inputmode="decimal" placeholder="Ex.: 500.000,00" />
+
+        <div class="input-group">
+          <h3>Objetivos e Ajustes</h3>
+          <div class="row">
+            <div>
+              <label for="taxaPassiva">Taxa para renda passiva (% a.m.)</label>
+              <input id="taxaPassiva" type="number" step="0.01" placeholder="Ex.: 1" />
+            </div>
+            <div>
+              <label for="objetivo">Objetivo financeiro (R$)</label>
+              <input id="objetivo" type="text" inputmode="decimal" placeholder="Ex.: 500.000,00" />
+            </div>
           </div>
-          <div>
-            <!-- Espaço vazio para manter o layout -->
-          </div>
+        </div>
+
+        <div class="actions-group">
+          <button class="btn" id="simular">Simular</button>
+          <button class="btn secondary" id="exemplo">Exemplo</button>
         </div>
 
         <div id="erro" class="err">Preencha valores válidos.</div>
 
-        <!-- KPIs -->
-        <div class="kpis">
-          <div class="kpi accent">
-            <div class="label">Valor Final</div>
-            <div class="value" id="kpiFinal">—</div>
+        <div class="kpis-group">
+          <h3>Resultados Nominais</h3>
+          <div class="kpis">
+            <div class="kpi accent">
+              <div class="label">Valor Final</div>
+              <div class="value" id="kpiFinal">—</div>
+            </div>
+            <div class="kpi neutral">
+              <div class="label">Total Investido</div>
+              <div class="value" id="kpiInvestido">—</div>
+            </div>
+            <div class="kpi dark">
+              <div class="label">Juros Acumulados</div>
+              <div class="value" id="kpiJuros">—</div>
+            </div>
           </div>
-          <div class="kpi neutral">
-            <div class="label">Total Investido</div>
-            <div class="value" id="kpiInvestido">—</div>
-          </div>
-          <div class="kpi dark">
-            <div class="label">Juros Acumulados</div>
-            <div class="value" id="kpiJuros">—</div>
-          </div>
+        </div>
 
-          <!-- NOVOS CARDS -->
-          <div class="kpi info">
-            <div class="label">Renda Passiva</div>
-            <div class="value" id="kpiPassivaMensal">—</div>
-            <div class="sub" id="kpiPassivaAnual">—</div>
+        <div class="kpis-group">
+          <h3>Resultados Reais (ajustados pela inflação)</h3>
+          <div class="kpis">
+            <div class="kpi accent">
+              <div class="label">Valor Final Real</div>
+              <div class="value" id="kpiFinalReal">—</div>
+            </div>
+            <div class="kpi neutral">
+              <div class="label">Total Investido Real</div>
+              <div class="value" id="kpiInvestidoReal">—</div>
+            </div>
+            <div class="kpi dark">
+              <div class="label">Juros Acumulados Reais</div>
+              <div class="value" id="kpiJurosReal">—</div>
+            </div>
           </div>
-          <div class="kpi info">
-            <div class="label">Aporte p/ Objetivo</div>
-            <div class="value" id="kpiAporteNec">—</div>
-            <div class="sub" id="kpiObjetivoMsg">—</div>
-          </div>
-          <div class="kpi accent">
-            <div class="label">Valor Final Real</div>
-            <div class="value" id="kpiFinalReal">—</div>
-          </div>
-          <div class="kpi neutral">
-            <div class="label">Total Investido Real</div>
-            <div class="value" id="kpiInvestidoReal">—</div>
-          </div>
-          <div class="kpi dark">
-            <div class="label">Juros Acumulados Reais</div>
-            <div class="value" id="kpiJurosReal">—</div>
+        </div>
+
+        <div class="kpis-group">
+          <h3>Outros Indicadores</h3>
+          <div class="kpis">
+            <div class="kpi info">
+              <div class="label">Renda Passiva</div>
+              <div class="value" id="kpiPassivaMensal">—</div>
+              <div class="sub" id="kpiPassivaAnual">—</div>
+            </div>
+            <div class="kpi info">
+              <div class="label">Aporte p/ Objetivo</div>
+              <div class="value" id="kpiAporteNec">—</div>
+              <div class="sub" id="kpiObjetivoMsg">—</div>
+            </div>
           </div>
         </div>
       </section>
@@ -159,17 +171,18 @@
 
         <div class="card">
           <h2>Resumo Mensal</h2>
+          <div class="table-controls">
+            <button class="btn small active" id="toggleNominal">Valores Nominais</button>
+            <button class="btn small secondary" id="toggleReal">Valores Reais</button>
+          </div>
           <div class="scroll">
             <table id="tabela">
               <thead>
-                <tr>
+                <tr id="tableHead">
                   <th>Mês</th>
                   <th>Saldo (R$)</th>
-                  <th>Saldo Real (R$)</th>
                   <th>Investido (R$)</th>
-                  <th>Investido Real (R$)</th>
                   <th>Juros (R$)</th>
-                  <th>Juros Real (R$)</th>
                 </tr>
               </thead>
               <tbody></tbody>
